@@ -1,4 +1,5 @@
 import streamlit as st
+import joblib
 
 # Configuração inicial da página
 st.set_page_config(
@@ -91,9 +92,8 @@ st.write(dados_iris)
 botao_adivinhar = st.button("🔍 Adivinhar espécie da flor", type="primary")
 
 if botao_adivinhar:
-    st.success("Botão funcionando! Aqui futuramente o modelo fará a previsão.")
 
-    st.write("Os dados enviados para o modelo seriam:")
+    modelo = joblib.load("modelos\\knn_flores_iris.joblib")
 
     entrada_modelo = [[
         sepal_length,
@@ -101,15 +101,16 @@ if botao_adivinhar:
         petal_length,
         petal_width
     ]]
+    previsao = modelo.predict(entrada_modelo)
 
-    st.code(entrada_modelo, language="python")
+    if previsao == 0:
+        previsao = "Setosa"
+    elif previsao == 1:
+        previsao = "Versicolor"
+    else:
+        previsao = "Virginica"        
 
-    st.warning(
-        """
-        A implementação do modelo ainda não foi adicionada.
-        O próximo passo será carregar o arquivo `.joblib` e usar `model.predict()`.
-        """
-    )
+    st.code(, language="python")
 
 st.divider()
 
@@ -117,3 +118,4 @@ st.divider()
 st.caption(
     "Projeto didático com Streamlit + Scikit-Learn — Dataset Iris"
 )
+
